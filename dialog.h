@@ -4,8 +4,6 @@
 #include <QDialog>
 #include <QTimer>
 
-#include "server.h"
-
 namespace Ui {
 class Dialog;
 }
@@ -17,31 +15,32 @@ class Dialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit Dialog(QWidget *parent = 0);
+    explicit Dialog(QWidget *parent = Q_NULLPTR);
     ~Dialog();
 
 signals:
-    void sendData(QByteArray data, int id);
+    void sendData(int id, const QByteArray &data);
 
 public slots:
-    void revData(QString peerHost, QByteArray data);
+    void recvData(const QString &ip, const QByteArray &data);
 
 private slots:
-    void showConnection();
-    void showDisconnection(int socketDescriptor);
-    void sendMsg();
-    void clearMsg();
-    void sendLoopMessage();
-    void stopLoopSend();
+    void showConnection(int sockDesc);
+    void showDisconnection(int sockDesc);
+    void sendHexData(void);
+    void sendDataSlot(void);
+    void clearData(void);
+    void startLoopSend(void);
+    void stopLoopSend(void);
 
 private:
     Ui::Dialog *ui;
+    friend class Server;
 
-    int count;
+    QTimer *m_timer;
+    Server *m_server;
 
-    Server *server;
-
-    QTimer *timer;
+    int m_count;
 };
 
 #endif // DIALOG_H

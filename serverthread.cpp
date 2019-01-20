@@ -1,45 +1,50 @@
 #include "serverthread.h"
 
-serverThread::serverThread(int socketDescriptor, QObject *parent) :
-    QThread(parent), socketDescriptor(socketDescriptor)
+serverThread::serverThread(int sockDesc, QObject *parent) :
+    QThread(parent),
+    m_sockDesc(sockDesc)
 {
 
 }
 
 serverThread::~serverThread()
 {
-    socket->close();
+    m_socket->close();
 }
 
-void serverThread::run()
+void serverThread::run(void)
 {
-    socket = new MySocket(socketDescriptor, 0);
+    m_socket = new MySocket(m_sockDesc);
 
-    if (!socket->setSocketDescriptor(socketDescriptor))
+    if (!m_socket->setSocketDescriptor(m_sockDesc)) {
         return ;
+    }
 
-    connect(socket, &MySocket::disconnected, this, &serverThread::disconnectToHost);
-    connect(socket, SIGNAL(revData(QString, QByteArray)), this, SLOT(recvData(QString, QByteArray)));
-    connect(this, SIGNAL(sendDat(QByteArray, int)), socket, SLOT(sendMsg(QByteArray, int)));
+    connect(m_socket, &MySocket::disconnected, this, &serverThread::disconnectToHost);
+    connect(m_socket, SIGNAL(dataReady(const QString&, const QByteArray&)),
+            this, SLOT(recvDataSlot(const QString&, const QByteArray&)));
+    connect(this, SIGNAL(sendData(int, const QByteArray&)),
+            m_socket, SLOT(sendData(int, const QByteArray&)));
 
-    exec();
+    this->exec();
 }
 
-void serverThread::sendData(QByteArray data, int id)
+void serverThread::sendDataSlot(int sockDesc, const QByteArray &data)
 {
-    if (data == "")
+    if (data.isEmpty()) {
         return ;
+    }
 
-    emit sendDat(data, id);
+    emit sendData(sockDesc, data);
 }
 
-void serverThread::recvData(QString peerAddr, QByteArray data)
+void serverThread::recvDataSlot(const QString &ip, const QByteArray &data)
 {
-    emit revData(peerAddr, data);
+    emit dataReady(ip, data);
 }
 
-void serverThread::disconnectToHost()
+void serverThread::disconnectToHost(void)
 {
-    emit disconnectTCP(socketDescriptor);
-    socket->disconnectFromHost();
+    emit disconnectTCP(m_sockDesc);
+    m_socket->disconnectFromHost();
 }

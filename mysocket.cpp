@@ -1,28 +1,28 @@
 #include "mysocket.h"
 
-MySocket::MySocket(int socketDescriptor, QObject *parent)
-    : QTcpSocket(parent), socketDescriptor(socketDescriptor)
+MySocket::MySocket(int sockDesc, QObject *parent) :
+    QTcpSocket(parent),
+    m_sockDesc(sockDesc)
 {
     connect(this, SIGNAL(readyRead()), this, SLOT(recvData()));
 }
 
-void MySocket::sendMsg(QByteArray msg, int id)
+MySocket::~MySocket()
 {
-    if (id == socketDescriptor)
-    {
-        write(msg);
+
+}
+
+void MySocket::sendData(int id, const QByteArray &data)
+{
+    if (id == m_sockDesc && !data.isEmpty()) {
+        this->write(data);
     }
 }
 
-void MySocket::recvData()
+void MySocket::recvData(void)
 {
-    QByteArray data;
-    QString peerAddr;
+    QString ip = peerAddress().toString().remove(0, 7);
+    QByteArray data = readAll();
 
-    data = readAll();
-
-    QString temp = peerAddress().toString();
-    peerAddr = temp.remove(0, 7);
-
-    emit revData(peerAddr, data);
+    emit dataReady(ip, data);
 }

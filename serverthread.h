@@ -14,26 +14,28 @@ class serverThread : public QThread
 {
     Q_OBJECT
 public:
-    serverThread(int socketDes, QObject *parent = 0);
+    serverThread(int sockDesc, QObject *parent = Q_NULLPTR);
     ~serverThread();
-    void run();
-
-public:
-    int socketDescriptor;    
-
-signals:
-    void revData(QString, QByteArray);
-    void sendDat(QByteArray data, int id);
-    void disconnectTCP(int );
-
-private slots:   
-    void sendData(QByteArray data, int id);
-    void recvData(QString, QByteArray);
-    void disconnectToHost();
 
 private:
-    MySocket *socket;
+    void run(void);
 
+public slots:
+    void sendDataSlot(int sockDesc, const QByteArray &data);
+
+signals:
+    void dataReady(const QString &ip, const QByteArray &data);
+    void sendData(int sockDesc, const QByteArray &data);
+    void disconnectTCP(int sockDesc);
+
+private slots:   
+    void recvDataSlot(const QString &ip, const QByteArray &data);
+    void disconnectToHost(void);
+
+private:
+    MySocket *m_socket;
+
+    int m_sockDesc;
 };
 
 #endif // SERVERTHREAD_H

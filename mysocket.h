@@ -10,16 +10,18 @@ class MySocket : public QTcpSocket
 {
     Q_OBJECT
 public:
-    explicit MySocket(int socket, QObject *parent = 0);
+    explicit MySocket(int sockDesc, QObject *parent = Q_NULLPTR);
+    ~MySocket();
 
 signals:
-    void revData(QString, QByteArray);
+    void dataReady(const QString &ip, const QByteArray &data);
+
 public slots:
-    void recvData();
-    void sendMsg(QByteArray msg, int id);
+    void recvData(void);
+    void sendData(int id, const QByteArray &data);
 
 private:
-    int socketDescriptor;
+    int m_sockDesc;
 };
 
 #endif // MYSOCKET_H

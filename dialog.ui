@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>629</width>
-    <height>488</height>
+    <width>736</width>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +20,15 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTextBrowser" name="msg"/>
+      <widget class="QTextBrowser" name="textBrowser"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QLineEdit" name="sendMsg"/>
+        <widget class="QLineEdit" name="lineEditMsg"/>
        </item>
        <item>
-        <widget class="QPushButton" name="sendBtn">
+        <widget class="QPushButton" name="btnSend">
          <property name="text">
           <string>发送</string>
          </property>
@@ -43,24 +46,24 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="objectBox"/>
+        <widget class="QComboBox" name="comboBoxObj"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="hexCheckBox">
+        <widget class="QCheckBox" name="checkBoxHex">
          <property name="text">
           <string>HEX收发 </string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="addrCheckBox">
+        <widget class="QCheckBox" name="checkBoxHideIP">
          <property name="text">
           <string>不显示客户端地址   </string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="circleCheckBox">
+        <widget class="QCheckBox" name="checkBoxCycle">
          <property name="text">
           <string>收发循环</string>
          </property>
@@ -80,7 +83,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="clearBtn">
+        <widget class="QPushButton" name="btnClear">
          <property name="text">
           <string>清空接收</string>
          </property>
@@ -98,7 +101,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="num">
+        <widget class="QLabel" name="labelNum">
          <property name="text">
           <string/>
          </property>
@@ -118,7 +121,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QCheckBox" name="loopCheckBox">
+        <widget class="QCheckBox" name="checkBoxLoop">
          <property name="text">
           <string>重复发送</string>
          </property>
@@ -132,7 +135,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="periodLineEdit"/>
+        <widget class="QLineEdit" name="lineEditLoopTime"/>
        </item>
        <item>
         <widget class="QLabel" name="label_4">
@@ -142,7 +145,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="loopStopBtn">
+        <widget class="QPushButton" name="btnStopLoop">
          <property name="text">
           <string>停止</string>
          </property>

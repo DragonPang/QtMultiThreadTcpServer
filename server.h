@@ -4,7 +4,6 @@
 #include <QTcpServer>
 
 #include "serverthread.h"
-#include "dialog.h"
 
 class Dialog;
 
@@ -12,20 +11,19 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Server(QObject *parent = 0);
+    explicit Server(QObject *parent = Q_NULLPTR);
     ~Server();
 
-public:
-    QList<int> socketList;
-
 private:
-    void incomingConnection(int socketDescriptor);
+    void incomingConnection(int sockDesc);
 
 private slots:
+    void clientDisconnected(int sockDesc);
 
 private:
-    Dialog *dialog;
+    Dialog *m_dialog;
 
+    QList<int> m_socketList;
 };
 
 #endif // SERVER_H
