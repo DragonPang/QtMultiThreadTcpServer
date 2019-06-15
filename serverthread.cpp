@@ -47,4 +47,5 @@ void serverThread::disconnectToHost(void)
 {
     emit disconnectTCP(m_sockDesc);
     m_socket->disconnectFromHost();
+    this->quit();
 }
